@@ -24,11 +24,11 @@
 
             function colorText_i(text, color = "rgb(200, 38, 19)") {
                 return `<i style='color: ${color}'; font-family: Arial, sans-serif'; font-size: 12pt;'>${text}</i>`
-    }
+            }
 
             function colorText(text, color = "black") {
                 return `<span style='color: ${color}'; font-family: Arial, sans-serif'; font-size: 12pt;'>${text}</span>`
-    }
+            }
 
             function getRouteName(routeName) {
                 if (routeName.startsWith("UB") || routeName.startsWith("DB")) {
@@ -211,7 +211,7 @@
             emailButton.find('.fa-file-text-o').remove();
             emailButton.find('span').text("Email").off('click').click(function(event) {
                 event.preventDefault();
-
+                
                 const emailData = getCalenderData()
                 const dayEntry = emailData.days[index];
                 const emailText = generateEmail(dayEntry);
