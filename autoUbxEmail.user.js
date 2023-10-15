@@ -73,9 +73,8 @@
             return emailText;
         }
 
-
+        const CalenderList = $(".calendar-days");
         function getCalenderData() {
-            const CalenderList = $(".calendar-days");
             let All = { days: [] };
 
             CalenderList.find("> .calendar-day").each(function(index) {
