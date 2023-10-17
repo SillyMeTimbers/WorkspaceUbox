@@ -11,6 +11,17 @@
 (function() {
     'use strict';
 
+    function extractTextFromGroup(htmlContent, groupNames) {
+        for (let groupName of groupNames) {
+            const pattern = new RegExp(`<b>${groupName}.*?<\\/b>\\s*(.*?)\\s*(?:<text>|<b>|<br>)`, 'i');
+            const match = htmlContent.match(pattern);
+            if (match && match[1]) {
+                return match[1].trim();
+            }
+        }
+        return null;
+    }
+
     function addEmailButtons() {
         function standardizeAddress(address) {
             let standardized = address.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
@@ -118,7 +129,7 @@
                                 let delivery_CoveringEntity
                                 let delivery_Box
 
-                                if (DelTypeH1.toLowerCase() === "scheduled transfer") {
+                                if (DelTypeH1.toLowerCase() === "scheduled transfer" || DelTypeH1.toLowerCase() === "hub transfer") {
                                     inf_DelType = "Transfer";
 
                                     const TransferString = DeliveryToolTip.find("p").text().trim().split(" ")
@@ -146,20 +157,18 @@
                                     delivery_PhoneNumber = CustomerPhoneNumber
 
                                     if (DeliveryToolTip.find(".no-styles > span:eq(3)")) {
-                                        if (DeliveryToolTip.find(".no-styles > text:eq(1) > span:eq(1)").text().trim().length > 0) {
-                                            const timeWindow = DeliveryToolTip.find(".no-styles > text:eq(1) > span:eq(1)").text().trim()
-                                            delivery_Window = timeWindow
-
-                                            const coveringEntity = DeliveryToolTip.find(".no-styles > text:eq(2)").text().trim().split(":")[1].trim()
-                                            delivery_CoveringEntity = coveringEntity
+                                        const TimeWindow = extractTextFromGroup(DeliveryToolTip.find(".no-styles").html(), ["Pickup Window:", "Delivery Window:"]);
+                                        if (TimeWindow) {
+                                            delivery_Window = TimeWindow
                                         } else {
-                                            const timeWindow = DeliveryToolTip.find(".no-styles > text:eq(2) > span:eq(1)").text().trim()
-                                            delivery_Window = timeWindow
+                                            delivery_Window = "Unscheduled"
+                                        }
 
-                                            if (DeliveryToolTip.find(".no-styles > text:eq(3)").text()) {
-                                                const coveringEntity = DeliveryToolTip.find(".no-styles > text:eq(3)").text().trim().split(":")[1].trim()
-                                                delivery_CoveringEntity = coveringEntity
-                                            }
+                                        const CoveringEntity = extractTextFromGroup(DeliveryToolTip.find(".no-styles").html(), ["Covering Entity:"]);
+                                        if (CoveringEntity) {
+                                            delivery_CoveringEntity = CoveringEntity
+                                        } else {
+                                            delivery_CoveringEntity = 781008
                                         }
                                     }
 
@@ -211,7 +220,7 @@
             emailButton.find('.fa-file-text-o').remove();
             emailButton.find('span').text("Email").off('click').click(function(event) {
                 event.preventDefault();
-                
+
                 const emailData = getCalenderData()
                 const dayEntry = emailData.days[index];
                 const emailText = generateEmail(dayEntry);
