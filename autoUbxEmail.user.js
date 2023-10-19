@@ -83,14 +83,13 @@
 						} else {
 							const actionWord = movement.deliveryType === "Deliver" ? "to" : "from";
 							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + "</b><br>"
-							//emailText += "notes: " + colorText(movement.delivery_Notes) + "<br>"
 							emailText += colorText(movement.delivery_PhoneNumber + "&nbsp;&nbsp;&nbsp;&nbsp;" + standardizeAddress(movement.delivery_Address)) + "<br>"
 						}
 
 						//emailText += colorText("notes: ", "light gray") + "<br>"
 
 						if (movement.boxNumbers && movement.boxNumbers.length) {
-							emailText += "<ul style='font-size: 12pt;'>";
+							emailText += "<ul style='color: black; font-size: 12pt;'>";
 							for (let box of movement.boxNumbers) {
 								emailText += "<li>" + colorText(box) + "</li>";
 							}
