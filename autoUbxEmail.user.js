@@ -14,18 +14,12 @@
 	// 1. Add a global variable to store the clicked date
 	let clickedDate = null;
 
-	function extractTextFromGroup(htmlContent, groupNames, customChild = 1) {
-		for (let groupName of groupNames) {
-			const pattern = new RegExp(`<b[^>]*>${groupName}<\\/b>(?:[^<]*|<[^\\/b>]*>|<!--.*?-->)*?<span[^>]*>(.*?)<\\/span>`, 'i');
-			const match = htmlContent.match(pattern);
-
-			if (match && match[customChild]) {
-				return match[customChild].trim();
-			}
-		}
-
-		return null;
-	}
+    function extractTextGroup(htmlContent, groupName) {
+        // Create a regex pattern to capture the text after the group name until the next <text>, <b> or <br> tag.
+        const pattern = new RegExp(`<b>${groupName}.*?<\\/b>\\s*(.*?)\\s*(?:<text>|<b>|<br>)`, 'i');
+        const match = htmlContent.match(pattern);
+        return match && match[1] ? match[1].trim() : null;
+    }
 
 	function extractTimeWindowFromGroup(jquerySelector, groupNames) {
 		for (let groupName of groupNames) {
@@ -72,14 +66,20 @@
 			}
 
 			function formatCoveringEntity(covering, deliveryType) {
-				if (covering !== getEntity()) {
+                covering = $($('<div>').html(covering)).text();
+
+				if (Number(covering) !== Number(getEntity())) {
+                    const actionWord = deliveryType === "Deliver" ? "Pickup" : "Return";
+                    console.log(getEntity())
 					console.log(covering)
+                    console.log(covering == getEntity())
 					console.log(deliveryType)
+                    return " (" + actionWord + " @ " + covering + ")"
 				}
 
-				return "()"
+				return ""
 			}
-			
+
 			emailText += "<b style='color: black; font-size: 16pt;'>" + getEntity() + "</b><br>";
 
 			for (let route of dayEntry.routes) {
@@ -91,7 +91,7 @@
 							emailText += "<b><i style='color: rgb(200, 38, 19); font-size: 12pt;'>TRANSFER</i> " + movement.transfer_Amount + " from " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_From}</i>` + " to " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_To}</i></b>` + "<br>";
 						} else {
 							const actionWord = movement.deliveryType === "Deliver" ? "to" : "from";
-							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + " " + colorText(formatCoveringEntity()) + "</b><br>"
+							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + colorText(formatCoveringEntity(movement.delivery_CoveringEntity, movement.deliveryType)) + "</b><br>"
 							emailText += colorText(movement.delivery_PhoneNumber + "&nbsp;&nbsp;&nbsp;&nbsp;" + standardizeAddress(movement.delivery_Address)) + "<br>"
 						}
 
@@ -201,8 +201,9 @@
 											delivery_Window = "Unscheduled"
 										}
 
-										const CoveringEntity = extractTextFromGroup(DeliveryToolTip.find(".no-styles").html(), ["Covering Entity:"]);
+										const CoveringEntity = extractTextGroup(DeliveryToolTip.find(".no-styles").html(), ["Covering Entity:"], 2);
 										if (CoveringEntity) {
+                                            console.log(CoveringEntity)
 											delivery_CoveringEntity = CoveringEntity
 										} else {
 											delivery_CoveringEntity = 781008
