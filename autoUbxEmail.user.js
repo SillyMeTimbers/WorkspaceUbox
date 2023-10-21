@@ -71,6 +71,15 @@
 				return $("optgroup").find("> option:selected").text().trim().split(" ")[0] || 781000
 			}
 
+			function formatCoveringEntity(covering, deliveryType) {
+				if (covering !== getEntity()) {
+					console.log(covering)
+					console.log(deliveryType)
+				}
+
+				return "()"
+			}
+			
 			emailText += "<b style='color: black; font-size: 16pt;'>" + getEntity() + "</b><br>";
 
 			for (let route of dayEntry.routes) {
@@ -82,7 +91,7 @@
 							emailText += "<b><i style='color: rgb(200, 38, 19); font-size: 12pt;'>TRANSFER</i> " + movement.transfer_Amount + " from " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_From}</i>` + " to " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_To}</i></b>` + "<br>";
 						} else {
 							const actionWord = movement.deliveryType === "Deliver" ? "to" : "from";
-							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + "</b><br>"
+							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + " " + colorText(formatCoveringEntity()) + "</b><br>"
 							emailText += colorText(movement.delivery_PhoneNumber + "&nbsp;&nbsp;&nbsp;&nbsp;" + standardizeAddress(movement.delivery_Address)) + "<br>"
 						}
 
