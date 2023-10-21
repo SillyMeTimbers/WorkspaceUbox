@@ -88,10 +88,11 @@
 
 					for (let movement of route.groupMovements) {
 						if (movement.deliveryType.toLowerCase() === "transfer") {
-							emailText += "<b><i style='color: rgb(200, 38, 19); font-size: 12pt;'>TRANSFER</i> " + movement.transfer_Amount + " from " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_From}</i>` + " to " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_To}</i></b>` + "<br>";
+							emailText += "<b>→ <i style='color: rgb(200, 38, 19); font-size: 12pt;'>TRANSFER</i> " + movement.transfer_Amount + " from " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_From}</i>` + " to " + `<i style='color: rgb(200, 38, 19); font-size: 12pt;'>${movement.transfer_To}</i></b>` + "<br>";
 						} else {
 							const actionWord = movement.deliveryType === "Deliver" ? "to" : "from";
-							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + colorText(formatCoveringEntity(movement.delivery_CoveringEntity, movement.deliveryType)) + "</b><br>"
+							const actionWordSymbol = movement.deliveryType === "Deliver" ? "↓" : "↑";
+							emailText += "<b>" + colorText(actionWordSymbol + " ") + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(movement.boxNumbers.length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + colorText(formatCoveringEntity(movement.delivery_CoveringEntity, movement.deliveryType)) + "</b><br>"
 							emailText += colorText(movement.delivery_PhoneNumber + "&nbsp;&nbsp;&nbsp;&nbsp;" + standardizeAddress(movement.delivery_Address)) + "<br>"
 						}
 
