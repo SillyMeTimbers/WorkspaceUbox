@@ -174,7 +174,7 @@
 			emailText += "<b style='color: black; font-size: 16pt;'>" + getEntity() + "</b><br>";
 
 			for (let route of dayEntry.routes) {
-				if (route.routeStart !== "") {
+				if (route.routeStart !== "(Unassigned)") {
 					emailText += "<b style='color: black; font-size: 14pt;'>" + getRouteName(route.routeStart) + "</b><br>";
 
 					for (let movement of route.groupMovements) {
