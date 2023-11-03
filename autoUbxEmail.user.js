@@ -109,7 +109,7 @@
 		const returnNotes = []
 
 		if (GetActiveNotes && GetActiveNotes.css("display") == "block") {
-			const NotesList = $(".notes-list")
+			const NotesList = GetActiveNotes.find(".notes-list")
 
 			if (NotesList) {
 				NotesList.find("> li").each(function () {
