@@ -157,7 +157,7 @@
 			}
 
 			function getEntity() {
-				return $("optgroup").find("> option:selected").text().trim().split(" ")[0] || 781000
+				return $("optgroup").find("> option:selected").val().trim() || 781000
 			}
 
 			function formatCoveringEntity(covering, deliveryType) {
