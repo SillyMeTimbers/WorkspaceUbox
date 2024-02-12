@@ -157,7 +157,7 @@
 			}
 
 			function getEntity() {
-				return $("optgroup").find("> option:selected").val().trim() || 781000
+				return $("#dynatraceEntityAndUserName").text().substring(0, 6).trim() || 781000
 			}
 
 			function formatCoveringEntity(covering, deliveryType) {
