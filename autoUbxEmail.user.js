@@ -179,7 +179,7 @@
 
 					for (let movement of route.groupMovements) {
 						if (movement.deliveryType.toLowerCase() === "transfer") {
-							emailText += "<b>" + colorText_i("TRANSFER") + colorText(" " + movement.transfer_Amount + " from ") + colorText_i(movement.transfer_From) + " to " + colorText(movement.transfer_To) + "<b><br>"
+							emailText += "<b>" + colorText_i("TRANSFER") + colorText(" " + movement.transfer_Amount + " from ") + colorText_i(movement.transfer_From) + " to " + colorText_i(movement.transfer_To) + "<b><br>"
 						} else {
 							const actionWord = movement.deliveryType === "Deliver" ? "to" : "from";
 							emailText += "<b>" + colorText_i(movement.deliveryType.toUpperCase()) + " " + colorText(getNumberOfBoxes(movement.boxNumbers).length) + " " + colorText(movement.delivery_Box) + " " + colorText(actionWord) + " " + colorText_i(movement.delivery_LastName) + colorText(" in ") + colorText_i(standardizeAddress(movement.delivery_City).toUpperCase()) + colorText(" between ") + colorText_i(movement.delivery_Window) + colorText(formatCoveringEntity(movement.delivery_CoveringEntity, movement.deliveryType)) + "</b><br>"
